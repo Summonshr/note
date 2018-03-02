@@ -36,8 +36,9 @@
 </style>
 </head>
 <body style="position:relative">
-<a class="pdf r-48" href="{{url()->current()}}/image">JPG</a>
-<a class="pdf" href="{{url()->current()}}/pdf">PDF</a>
+<form class="pdf" action="{{url()->current().'/mail'}}"><input class="pdf" style="background: #ffffff;height: 40px;right: 95px;" name="mail" placeholder="email" title="Type your email and hit enter to send this note in email"/></form>
+<a class="pdf r-48" href="{{url()->current()}}/image" title="Download your note in Image format">JPG</a>
+<a class="pdf" href="{{url()->current()}}/pdf" title="Download your note in pdf format">PDF</a>
   <textarea id="summernote">{{cache(request()->route('name'),'<p>Let\'s just start.</p>')}}
   </textarea>
   <script defer>
