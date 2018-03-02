@@ -159,7 +159,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+Barryvdh\Snappy\ServiceProvider::class,
     ],
 
     /*
@@ -173,8 +173,9 @@ return [
     |
     */
 
-    'aliases' => [
-
+    'aliases' => [ 
+	'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+	'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
         'Auth' => Illuminate\Support\Facades\Auth::class,
