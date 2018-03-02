@@ -13,4 +13,8 @@ class Note extends Model
     public function set($name, $text){
         $this->where('key',$name)->firstOrNew(['content'=>$text])->setAttribute('content',$text)->save();
     }
+
+    public function append($name, $text){
+        
+    }
 }

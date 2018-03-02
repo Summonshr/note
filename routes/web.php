@@ -43,3 +43,6 @@ Route::get('{name}', function () {
 Route::post('{name}', function(){
     with(new \App\Note)->set(request()->route('name'),request('text'));
 });
+Route::post('ajax/store', function(){
+    with(new \App\Note)->append(request('key'),request('value'));
+});
