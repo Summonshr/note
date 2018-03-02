@@ -15,7 +15,7 @@ Route::get('/', function(){
 });
 
 Route::get('{name}/html', function(){
-	return cache()->get(request()->route('name'),'Nothing found');
+	return with(new \App\Note)->get(request()->route('name'));
 });
 
 Route::get('{name}/image', function(){
@@ -24,11 +24,11 @@ Route::get('{name}/image', function(){
 
 Route::get('{name}/mail', function(){
 	rescue(function(){
-Mail::send('mail', ['content'=>cache()->get(request()->route('name'))], function($m){
-        $m->from('noreply@pdfpub.com','PDFPUB.com');
-        $m->to(request()->get('mail'))->subject('Note about '.request()->route('name'));
+        Mail::send('mail', ['content'=>with(new \App\Note)->get(request()->route('name'))], function($m){
+            $m->from('noreply@pdfpub.com','PDFPUB.com');
+            $m->to(request()->get('mail'))->subject('Note about '.request()->route('name'));
         });
-});	
+    });	
 	return back();
 });
 
@@ -41,5 +41,5 @@ Route::get('{name}', function () {
 });
 
 Route::post('{name}', function(){
-    cache()->forever(request()->route('name'), request('text'));
+    with(new \App\Note)->set(request()->route('name'),request('text'));
 });
