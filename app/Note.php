@@ -6,15 +6,35 @@ use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
+    public $fillable = ['content'];
     public function get($name){
-        return $this->where('key',$name)->first()->content ?? 'Nothing found';
+        return $this->where('key',$name)->first()->content ?? '<p>Let\'s start writing.</p>';
     }
 
     public function set($name, $text){
-        $this->where('key',$name)->firstOrNew(['content'=>$text])->setAttribute('content',$text)->save();
+
+        $note = Note::where('key',$name)->first();
+        
+        if(!$note){
+            $note = new Note;
+                $note->key = $name;
+        }
+        
+        $note->content = $text;
+        $note->save();
+    }
+    public function append($name, $text){
+
+        $note = Note::where('key',$name)->first();
+        
+        if(!$note){
+            $note = new Note;
+            $note->key = $name;
+            $note->content = '';
+        }
+        
+        $note->content .= $text;
+        $note->save();
     }
 
-    public function append($name, $text){
-        
-    }
 }
