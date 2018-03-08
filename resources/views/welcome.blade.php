@@ -39,24 +39,61 @@ color:black;
 </style>
 </head>
 <body style="position:relative">
+@if(request('mode') == 'demon')
 <form class="pdf" action="{{url()->current().'/mail'}}"><input class="pdf" style="color:black;background: #ffffff;height: 40px;right: 95px;" name="mail" placeholder="email" title="Type your email and hit enter to send this note in email"/></form>
 <a class="pdf r-48" href="{{url()->current()}}/image" title="Download your note in Image format">JPG</a>
+@endif
 <a class="pdf" href="{{url()->current()}}/pdf" title="Download your note in pdf format">PDF</a>
-  <textarea id="summernote">{{with(new \App\Note)->get(request()->route('name')) ?? "Let's start"}}
+  <textarea id="summernote">{{request()->route('note')->content ?? "Let's start"}}
   </textarea>
   <script defer>
     var hold = null;
+    var Protect = function (context) {
+        var ui = $.summernote.ui;
+        // create button
+        var button = ui.button({
+        contents: 'P',
+        tooltip: 'Protect it with password',
+        click: function () {
+            var password = prompt('Enter password');
+            if( password ){
+                var email = prompt('Enter email ( In case you forget )');
+                if(email){
+                    $.post("{{url()->current()}}/protect", {password: password,email:email}).then(function(){
+                        alert('Note is under protection.');
+                    });
+                    return;
+                }
+            }
+            alert("Not protected")
+        }
+        });
+        return button.render();   // return button as jquery object
+    }
+
     $(document).ready(function() {
         $('#summernote').summernote({
             placeholder: 'Just start writing',
             tabsize: 2,
             height: 500,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                [ ['protect']]
+            ],
             callbacks: {
                 onChange: function() {
                     var val = $('.note-editable').html();
                     hold && hold.abort();
                     hold = $.post("{{url()->current()}}", {text: val})
                 }
+            },
+            buttons: {
+                protect: Protect
             }
         });
     });

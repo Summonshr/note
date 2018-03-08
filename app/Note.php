@@ -37,4 +37,13 @@ class Note extends Model
         $note->save();
     }
 
+    public function protect($name, $email, $password){
+ 
+        $note = Note::where('key',$name)->first();
+        $note->email = $email;
+        $note->password = bcrypt($password);
+        $note->save();
+        
+    }
+
 }
