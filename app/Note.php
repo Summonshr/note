@@ -23,7 +23,7 @@ class Note extends Model
         $note->content = $text;
         $note->save();
     }
-    public function append($name, $text){
+    public function appends($name, $text){
 
         $note = Note::where('key',$name)->first();
         
