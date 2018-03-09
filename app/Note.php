@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Note extends Model
 {
-    public $fillable = ['content','key'];
+    public $fillable = ['content','key','email','password'];
 
     public function appends($name, $text){
 
@@ -20,15 +20,6 @@ class Note extends Model
         
         $note->content .= $text;
         $note->save();
-    }
-
-    public function protect($name, $email, $password){
- 
-        $note = Note::where('key',$name)->first();
-        $note->email = $email;
-        $note->password = bcrypt($password);
-        $note->save();
-        
     }
 
     public function sendMail($email){

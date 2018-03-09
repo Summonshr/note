@@ -10,6 +10,10 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('map', function(){
+    return view('map');
+});
 Route::get('/', function(){
     return redirect(str_random(10));
 });
@@ -32,15 +36,19 @@ Route::get('{note}/pdf', function(\App\Note $note){
 	return $note->exists ? PDF::loadHTML($note->content)->download(request()->route('name').'.pdf'): 'Note does note exists yet';
 });
 
-Route::get('{note}', function (\App\Note $note) {
-    return view('welcome');
-});
-
 Route::post('{note}', function (\App\Note $note) {
     $note->content = request('text');
     $note->save();
 });
+Route::get('{note}', function (\App\Note $note) {
+    return view('welcome');
+});
+
 
 Route::post('ajax/store', function(){
     with(new \App\Note)->appends(request('key'),request('value'));
 });
+
+function map($lat = null, $lng = null){
+    return new \App\Map($lat, $lng);    
+}
