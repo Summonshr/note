@@ -34,7 +34,7 @@
                     });
 
                     data.clusters && data.clusters.length > 0 && data.clusters.map(function(cluster){
-                        
+                        console.log(cluster);
                     });
                 }
             }
