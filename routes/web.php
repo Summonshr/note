@@ -14,35 +14,33 @@ Route::get('/', function(){
     return redirect(str_random(10));
 });
 
-Route::get('{name}/html', function(){
-	return with(new \App\Note)->get(request()->route('name'));
+Route::get('{note}/html', function(\App\Note $note){
+	return $note->content;
 });
 
-Route::get('{name}/image', function(){
-        return SnappyImage::loadFile(url(request()->route('name')).'/html')->download(request()->route('name').'.jpg');
+Route::get('{note}/image', function(\App\Note $note){
+        return $note->exists ?  SnappyImage::loadHTML($note->content)->download(request()->route('name').'.jpg') : 'Note does not exists yet';
 });
 
-Route::get('{name}/mail', function(){
-	rescue(function(){
-        Mail::send('mail', ['content'=>with(new \App\Note)->get(request()->route('name'))], function($m){
-            $m->from('noreply@pdfpub.com','PDFPUB.com');
-            $m->to(request()->get('mail'))->subject('Note about '.request()->route('name'));
-        });
-    });	
+Route::get('{note}/mail', function(\App\Note $note){
+    $note->exists && $note->sendMail(request()->get('mail'));
+
 	return back();
 });
 
-Route::get('{name}/pdf', function(){
-	return PDF::loadFile(url(request()->route('name')).'/html')->download(request()->route('name').'.pdf');
+Route::get('{note}/pdf', function(\App\Note $note){
+	return $note->exists ? PDF::loadHTML($note->content)->download(request()->route('name').'.pdf'): 'Note does note exists yet';
 });
 
-Route::get('{name}', function () {
+Route::get('{note}', function (\App\Note $note) {
     return view('welcome');
 });
 
-Route::post('{name}', function(){
-    with(new \App\Note)->set(request()->route('name'),request('text'));
+Route::post('{note}', function (\App\Note $note) {
+    $note->content = request('text');
+    $note->save();
 });
+
 Route::post('ajax/store', function(){
     with(new \App\Note)->appends(request('key'),request('value'));
 });
