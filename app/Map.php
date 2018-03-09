@@ -67,6 +67,7 @@ class Map
     public function drawLines(array $lines){
         foreach($lines as $line){
             $this->attributes['lines'][] = array_map(function($val){
+                dd($val);
                 return array_combine(array_slice(['lat','lng','content'],0,count($val)),$val);
             },array_filter($line, 'is_array'));
         }
