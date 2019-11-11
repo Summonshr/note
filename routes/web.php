@@ -33,7 +33,7 @@ Route::get('{note}/mail', function(\App\Note $note){
 });
 
 Route::get('{note}/pdf', function(\App\Note $note){
-	return $note->exists ? PDF::loadHTML($note->content)->download(request()->route('name').'.pdf'): 'Note does note exists yet';
+	return $note->exists ? PDF::loadHTML($note->content)->download(request()->route('name').'.pdf'): 'Note does not exists yet';
 });
 
 Route::post('{note}', function (\App\Note $note) {
